@@ -80,12 +80,12 @@ inf-mongo-mode-hook (in that order)."
 
   (if (not (comint-check-proc "*mongo*"))
       (save-excursion (let ((cmdlist (split-string cmd)))
-        (set-buffer (apply 'make-comint "mongo" (car cmdlist)
-                           nil (cdr cmdlist)))
-        (inf-mongo-mode)
-        (setq inf-mongo-command cmd) 
-        (setq inf-mongo-buffer "*mongo*")
-        (inf-mongo-setup-autocompletion))))
+                        (set-buffer (apply 'make-comint "mongo" (car cmdlist)
+                                           nil (cdr cmdlist)))
+                        (inf-mongo-mode)
+                        (setq inf-mongo-command cmd)
+                        (setq inf-mongo-buffer "*mongo*")
+                        (inf-mongo-setup-autocompletion))))
   (if (not dont-switch-p)
       (pop-to-buffer "*mongo*")))
 
@@ -158,7 +158,7 @@ With argument, position cursor at end of buffer."
   (comint-send-string (get-buffer-process inf-mongo-buffer) "\n")
   (define-key inf-mongo-mode-map "\t" 'complete-symbol))
 
-(defvar inf-mongo-prompt "\n> " 
+(defvar inf-mongo-prompt "\n> "
   "String used to match inf-mongo prompt.")
 
 (defvar inf-mongo--shell-output-buffer "")
@@ -222,7 +222,7 @@ Most of this is borrowed from python.el"
 
 (defun inf-mongo-get-completions-at-point (prefix)
   "Get completions for PREFIX using inf-mongo."
-  (if (equal prefix "") 
+  (if (equal prefix "")
       nil
     (split-string (inf-mongo-get-result-from-inf (concat "INFMONGO__getCompletions('" prefix "');")) ";")))
 
