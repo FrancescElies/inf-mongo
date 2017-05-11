@@ -78,16 +78,19 @@ inf-mongo-mode-hook (in that order)."
   (interactive (list (read-from-minibuffer "Run MongoDB shell: "
                                            inf-mongo-command)))
 
-  (if (not (comint-check-proc "*mongo*"))
+  (setq inf-mongo-command cmd)
+  (setq inf-mongo-process-name (concat "mongo "  (nth 1 (s-split " " cmd))))
+  (setq inf-mongo-buffer (concat "*" inf-mongo-process-name  "*"))
+
+  (if (not (comint-check-proc inf-mongo-buffer))
       (save-excursion (let ((cmdlist (split-string cmd)))
-                        (set-buffer (apply 'make-comint "mongo" (car cmdlist)
-                                           nil (cdr cmdlist)))
+                        (set-buffer (make-comint inf-mongo-process-name (car cmdlist)
+                                                 nil (cdr cmdlist)))
                         (inf-mongo-mode)
-                        (setq inf-mongo-command cmd)
-                        (setq inf-mongo-buffer "*mongo*")
                         (inf-mongo-setup-autocompletion))))
+
   (if (not dont-switch-p)
-      (pop-to-buffer "*mongo*")))
+      (pop-to-buffer inf-mongo-buffer)))
 
 ;;;###autoload
 (defun mongo-send-region (start end)
